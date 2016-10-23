@@ -10,9 +10,9 @@
     var vm = this;
 
     vm.user = {
-      title: 'Admin',
-      email: 'contact@flatlogic.com',
-      firstName: '',
+      first: 'Bob',
+      last: 'Anderson',
+      SSN: '1234',
       lastName: '' ,
       company: 'FlatLogic Inc.' ,
       address: 'Fabritsiusa str, 4' ,

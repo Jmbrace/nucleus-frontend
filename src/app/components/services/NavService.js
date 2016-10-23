@@ -15,7 +15,7 @@
         sref: '.dashboard'
       },
       {
-        name: 'Profile',
+        name: 'Look Up',
         icon: 'person',
         sref: '.profile'
       },

@@ -1,16 +1,34 @@
 (function () {
     angular
         .module('app')
-        .controller('MemoryController', [
+        .controller('MemoryController', ['$http','$window',
             MemoryController
         ]);
 
-    function MemoryController() {
+    function MemoryController($http, $window) {
         var vm = this;
+        var vols = vols || -1;
+        var needHelp = needHelp || -1; 
+        var total = total || 0;
 
+        function init(){
+            $http.get('https://nuclius-backend.herokuapp.com/ratio/users').success(function(response){
+                console.log(response);
+              var initit = needHelp < 0;
+                vols = response.vols;
+                needHelp = response.inneed;
+                total = needHelp + vols;
+                setUp();
+            })
+        }
+
+        init();
+
+
+      function setUp(){
         // TODO: move data to the service
-        vm.memoryChartData = [ {key: 'memory', y: 42}, { key: 'free', y: 58} ];
-
+        vm.memoryChartData = [ {key: 'Volunteers', y: vols/total}, { key: 'People In Need', y: needHelp/total} ];
+        var title = 100*vols/total+'%';
         vm.chartOptions = {
             chart: {
                 type: 'pieChart',
@@ -27,10 +45,11 @@
                 showLabels: false,
                 showLegend: false,
                 tooltips: false,
-                title: '42%',
+                title: title,
                 titleOffset: -10,
                 margin: { bottom: -80, left: -20, right: -20 }
             }
         };
+      }
     }
 })();

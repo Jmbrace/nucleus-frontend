@@ -1,15 +1,33 @@
 (function () {
     angular
         .module('app')
-        .controller('VisitorsController', [
+        .controller('VisitorsController', ['$http','$window',
             VisitorsController
         ]);
 
-    function VisitorsController() {
+    function VisitorsController($http, $window) {
         var vm = this;
+        var numServed = numServed || -1;
+        var numNotServed = numNotServed || -1;
+        var total = total || 0;
+        function init(){
+          $http.get('https://nuclius-backend.herokuapp.com/ratio/services').success(function(response){
+              console.log(response);
+              
+              numServed = response.numServed;
+              numNotServed = response.numNotServed;
+              total = numServed + numNotServed;
+                setUp();
+          });
 
-        // TODO: move data to the service
-        vm.visitorsChartData = [ {key: 'Mobile', y: 5264}, { key: 'Desktop', y: 3872} ];
+        }
+
+        init();
+
+
+        function setUp(){
+                    // TODO: move data to the service
+        vm.visitorsChartData = [ {key: 'Being Served', y: numServed}, { key: 'Needs Service', y: numNotServed} ];
 
         vm.chartOptions = {
             chart: {
@@ -22,9 +40,10 @@
                 color: ['rgb(0, 150, 136)', '#E75753'],
                 showLabels: false,
                 showLegend: false,
-                title: 'Over 9K',
                 margin: { top: -10 }
             }
         };
+        }
+
     }
 })();
